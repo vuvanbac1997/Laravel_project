@@ -11,16 +11,18 @@
 |
 */
 
-Route::group(['middleware' => ['web']], function () {
+Route::get('/', function () {
+    return view('welcome');
+});
 
-    Route::get('/', function () {
-        return view('welcome');
-    })->middleware('guest');
+Auth::routes();
+Route::middleware(['auth'])->group(function (){
+	Route::get('/home', 'HomeController@index')->name('home');
 
-    Route::get('/tasks', 'TaskController@index');
-    Route::post('/task', 'TaskController@store');
-    Route::delete('/task/{task}', 'TaskController@destroy');
-
-    Route::auth();
-
+	Route::resource('companies', 'CompaniesController');
+	Route::resource('projects', 'ProjectsController');
+	Route::resource('roles', 'RolesController');
+	Route::resource('tasks', 'TasksController');
+	Route::resource('users', 'UsersController');
+	Route::resource('comments', 'CommentsController');
 });
